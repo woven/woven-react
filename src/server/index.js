@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 
 app.use('/', express.static('target'))
+app.use('/', express.static('static'))
 
 app.use('/todos', (req, res) => {
   const todos = [
