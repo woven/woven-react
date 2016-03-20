@@ -13,7 +13,7 @@ export default () => {
 
   const serverTodos = getJson('/todos') // Read todos once from the server.
 
-  // TODO:
+  // This holds new todo data. From server + from the UI.
   const newTodoData = Rx.Observable.merge(
     serverTodos, // Just use server todos directly.
 
@@ -27,17 +27,17 @@ export default () => {
       .map(message => ({ checked: false, message: message }))
   )
 
-  // TODO:
-  // Now let's create a stream of todos we wish to display.
-  // The scan() below simply scans/reads `allTodoData`. Whenever `allTodoData` changes, the scan runs.
-  // The function you give to scan, gets two parameters. 1) the current state and 2) the new item/event that came from the `allTodoData` event stream.
-  // And finally, our function inside the scan returns the new state (old state + new item = new state).
-  // https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/scan.md
+  // Define some actions. We can either add or remove todos.
   const todoActions = Rx.Observable.merge(
     newTodoData.map(data => ({data: data, type: 'add'})),
     inputSources.removeTodo.map(index => ({index: index, type: 'remove'}))
   )
 
+  // Now let's create a stream of todos we wish to display.
+  // The scan() below simply scans/reads `allTodoData`. Whenever `allTodoData` changes, the scan runs.
+  // The function you give to scan, gets two parameters. 1) the current state and 2) the new item/event that came from the `allTodoData` event stream.
+  // And finally, our function inside the scan returns the new state (old state + new item = new state).
+  // https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/scan.md
   const todos = todoActions.scan((currentTodos, action) => {
     if (action.type == 'add') {
       console.log('Adding todo data: ', action.data)
