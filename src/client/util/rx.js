@@ -26,11 +26,6 @@ export const getObservableDataRecursivelyFromObject = (obj, path = '') => {
 
     if (is(rx.Observable, value)) {
       observables.push({ value, fullPath })
-    } else if (isArrayLike(value)) {
-      const xs = getObservableDataRecursivelyFromObject(value, fullPath)
-      for (const x of xs) {
-        observables.push(x)
-      }
     } else if (is(Object, value)) {
       const xs = getObservableDataRecursivelyFromObject(value, fullPath)
       for (const x of xs) {
