@@ -5,6 +5,7 @@ export default () => {
   // It extends Rx.Subject with few nice methods.
   const inputSource = new Rx.Subject()
 
+  inputSource.fromConstant = (value) => ((e) => inputSource.onNext(value))
   inputSource.fromValue = (e) => inputSource.onNext(e.target.value)
   inputSource.fromEvent = (e) => inputSource.onNext(e)
 

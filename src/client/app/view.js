@@ -1,5 +1,5 @@
 import {Component, createFactory} from 'react'
-import {div, ul, li, input, button} from '../util/dom'
+import {a, span, div, ul, li, input, button} from '../util/dom'
 
 class AppView extends Component {
   render() {
@@ -11,7 +11,12 @@ class AppView extends Component {
       ul({},
         // the `data` is passed to MyApp component at the bottom of the file (in ReactDOM.render())
         // and now we just 'loop' through the data, in this case, we map the todo items to todo elements.
-        view.todos.map((todo, i) => li({key: i}, todo.message))
+        view.todos.map((todo, i) =>
+          li({key: i},
+            span({}, todo.message),
+            a({ onClick: inputSources.removeTodo.fromConstant(i) }, 'Remove')
+          )
+        )
       ),
       input({
         value: view.newTodoMessage,
