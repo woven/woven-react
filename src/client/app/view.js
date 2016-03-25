@@ -1,5 +1,7 @@
+import * as ramda from 'ramda'
 import {Component, createFactory} from 'react'
 import {a, span, div, header, ul, li, input, button} from '../util/dom'
+import {mapObjectToList} from '../util/util'
 
 class AppView extends Component {
   render() {
@@ -12,10 +14,10 @@ class AppView extends Component {
         ul({},
           // the `data` is passed to MyApp component at the bottom of the file (in ReactDOM.render())
           // and now we just 'loop' through the data, in this case, we map the todo items to todo elements.
-          view.todos.map((todo, i) =>
-            li({key: i},
+          mapObjectToList(view.todos, (todo, todoId) =>
+            li({key: todoId},
               span({}, todo.message),
-              a({ onClick: inputSources.removeTodo.fromConstant(i) }, 'Remove')
+              a({ onClick: inputSources.removeTodo.fromConstant(todoId) }, 'Remove')
             )
           )
         ),

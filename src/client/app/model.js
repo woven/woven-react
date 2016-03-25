@@ -3,6 +3,11 @@ import * as Rx from 'rx'
 import InputSource from '../util/input-source'
 import {combineTemplate} from '../util/rx'
 import {getJson} from '../util/ajax'
+import Firebase from 'firebase'
+import {snapshotToObject, onValueOnce, onRemoved, onAdded} from '../util/firebase'
+
+const fb = new Firebase('https://glowing-inferno-1196.firebaseio.com/')
+const todosRef = fb.child('todos')
 
 export default () => {
   const inputSources = {
@@ -11,26 +16,19 @@ export default () => {
     removeTodo: InputSource()
   }
 
-  const serverTodos = getJson('/todos') // Read todos once from the server.
+  const addedTodo = inputSources.newTodoMessage
+    .sample(inputSources.addNewTodo)
+    .map(message => ({ checked: false, message: message }))
 
-  // This holds new todo data. From server + from the UI.
-  const newTodoData = Rx.Observable.merge(
-    serverTodos, // Just use server todos directly.
-
-    // For user todos we want to process a bit.
-    // `sample()` new todo messages based on when we click the 'Add!' button.
-    // We wish to only act when the user presses the button 'Add!', that's why the .sample(addNewTodo)
-    // Without the sampler here, every keystroke in the input would add a new todo :)
-    // After we receive a new message, `map` it into a todo item/object.
-    inputSources.newTodoMessage
-      .sample(inputSources.addNewTodo)
-      .map(message => ({ checked: false, message: message }))
-  )
+  // Persist...
+  addedTodo.subscribe(todo => todosRef.push(todo))
+  inputSources.removeTodo.subscribe(id => todosRef.child(id).remove())
 
   // Define some actions. We can either add or remove todos.
   const todoActions = Rx.Observable.merge(
-    newTodoData.map(data => ({data: data, type: 'add'})),
-    inputSources.removeTodo.map(index => ({index: index, type: 'remove'}))
+    onValueOnce(todosRef).map(snapshot => ({data: snapshot.val(), type: 'add'})),
+    onAdded(todosRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'add'})),
+    onRemoved(todosRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'remove'}))
   )
 
   // Now let's create a stream of todos we wish to display.
@@ -40,13 +38,11 @@ export default () => {
   // https://github.com/Reactive-Extensions/RxJS/blob/master/doc/api/core/operators/scan.md
   const todos = todoActions.scan((currentTodos, action) => {
     if (action.type == 'add') {
-      console.log('Adding todo data: ', action.data)
-      return ramda.concat(currentTodos, action.data) // A Ramda helper for concatting a new value into our todos array.
+      return ramda.merge(currentTodos, action.data)
     } else {
-      console.log('Removing todo data based on index: ', action.index)
-      return ramda.remove(action.index, 1, currentTodos) // A Ramda helper for removing an item from array based on index.
+      return ramda.omit(ramda.keys(action.data), currentTodos)
     }
-  }, []) // Start our todos with a seed value of [], i.e. no todos.
+  }, {})
 
   // Define the top level state for our entire app. This state goes to the view-side.
   // This is an Rx observable, which contains JS objects:
