@@ -8,6 +8,7 @@ export default () => {
   inputSource.fromConstant = (value) => ((e) => inputSource.onNext(value))
   inputSource.fromValue = (e) => inputSource.onNext(e.target.value)
   inputSource.fromEvent = (e) => inputSource.onNext(e)
+  inputSource.fromOnlyKeyCode = key => (e => (e.keyCode == key) ? inputSource.onNext(e.target.value) : null)
 
   return inputSource
 }

@@ -20,7 +20,8 @@ class AppView extends Component {
       ),
       input({
         value: view.newTodoMessage,
-        onChange: inputSources.newTodoMessage.fromValue // Wire up onChange to add the input's value in newTodoMessage input source.
+        onChange: inputSources.newTodoMessage.fromValue, // Wire up onChange to add the input's value in newTodoMessage input source.
+        onKeyUp: inputSources.addNewTodo.fromOnlyKeyCode(13)
       }),
       button({ onClick: inputSources.addNewTodo.fromEvent }, 'Add!') // Wire up the input source. We don't care about a 'value', just that it happened.
     )
