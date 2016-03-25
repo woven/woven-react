@@ -5,6 +5,7 @@ import {createFactory} from 'react'
 export const ul = createFactory('ul')
 export const li = createFactory('li')
 export const div = createFactory('div')
+export const header = createFactory('header')
 export const span = createFactory('span')
 export const a = createFactory('a')
 export const p = createFactory('p')
