@@ -6,7 +6,7 @@ module.exports = {
     path: __dirname,
     filename: "target/app.js"
   },
-  devtool: 'source-map',
+  devtool: 'eval-cheap-module-source-map',
   module: {
     loaders: [
       {
