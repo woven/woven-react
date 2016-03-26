@@ -6,6 +6,7 @@ module.exports = {
     path: __dirname,
     filename: "target/app.js"
   },
+  devtool: 'source-map',
   module: {
     loaders: [
       {
@@ -17,7 +18,7 @@ module.exports = {
         query: {
           presets: ['es2015'],
           cacheDirectory: '',
-          sourceMap: false
+          sourceMap: true
         }
       }
     ]
