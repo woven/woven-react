@@ -4,7 +4,7 @@ module.exports = {
   entry: "./src/client/index.js",
   output: {
     path: __dirname,
-    filename: "target/app.js"
+    filename: "../target/web/app.js"
   },
   devtool: 'eval-cheap-module-source-map',
   module: {
@@ -12,8 +12,10 @@ module.exports = {
       {
         test: /\.js$/,
         include: [
-          path.resolve(__dirname, "src/client")
+          path.resolve(__dirname, "../src/client"),
+          path.resolve(__dirname, "../src/shared")
         ],
+        exclude: [],
         loader: 'babel-loader',
         query: {
           presets: ['es2015'],
