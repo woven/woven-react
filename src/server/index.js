@@ -15,5 +15,5 @@ app.use('/todos', (req, res) => {
 })
 
 app.listen(8080, '0.0.0.0', () => {
-  console.log('up and running')
+  console.log('The server is up and running. ')
 })

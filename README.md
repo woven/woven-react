@@ -1,7 +1,6 @@
 # Todos demo app for Dave
 
-- have node, npm, webpack installed
+- Have node, npm, webpack, gulp installed globally.
 - `npm install` to get local deps.
-- run the server: `node src/server/index.js`
-- on another terminal, keep `webpack --watch` running
-- open browser at http://localhost:8080
+- Run the dev server with watchers: `gulp run-dev`.
+- Open browser at http://localhost:8080
