@@ -23,6 +23,7 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         include: [
+          path.resolve(__dirname, "../src/client"),
           path.resolve(__dirname, "../src/server"),
           path.resolve(__dirname, "../src/shared")
         ],

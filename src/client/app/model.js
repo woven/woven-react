@@ -6,10 +6,10 @@ import {getJson} from '../util/ajax'
 import Firebase from 'firebase'
 import {snapshotToObject, onValueOnce, onRemoved, onAdded} from '../util/firebase'
 
-const fb = new Firebase('https://glowing-inferno-1196.firebaseio.com/')
-const todosRef = fb.child('todos')
-
 export default () => {
+  const fb = new Firebase('https://glowing-inferno-1196.firebaseio.com/')
+  const todosRef = fb.child('todos')
+
   const inputSources = {
     newTodoMessage: InputSource(), // Our own helper thing.
     addNewTodo: InputSource(),

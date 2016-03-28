@@ -1,17 +1,33 @@
 import express from 'express'
+import fs from 'fs'
+import * as rxdom from 'rx-dom'
+import * as rxextra from './../client/util/rx-overrides'
+import {renderToString} from 'react-dom/server'
+import AppComponent from './../client/app/component'
 
 const app = express()
 
-app.use('/', express.static('target/web'))
-app.use('/', express.static('static'))
+const staticOptions = {
+  index: false,
+  setHeaders: res => {
+    res.setHeader('Cache-Control', 'public, max-age=31557600')
+  }
+}
 
-app.use('/todos', (req, res) => {
-  const todos = [
-    {id: 1, message: 'hello', checked: false},
-    {id: 2, message: 'hello 2', checked: true}
-  ]
-  res.send(JSON.stringify(todos))
-  res.end()
+app.use('/', express.static('target/web', staticOptions))
+app.use('/', express.static('static', staticOptions))
+
+app.use((req, res) => {
+  AppComponent().first().subscribe(vdom => {
+    const appHtml = renderToString(vdom)
+    fs.readFile('static/index.html', (err, html) => {
+      if (err) { throw err }
+
+      const htmlWithApp = html.toString().replace('<div id="app"></div>', `<div id="app">${appHtml}</div>`)
+      res.send(htmlWithApp)
+      res.end()
+    })
+  })
 })
 
 app.listen(8080, '0.0.0.0', () => {
