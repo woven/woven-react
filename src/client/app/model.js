@@ -2,7 +2,6 @@ import * as ramda from 'ramda'
 import * as Rx from 'rx'
 import InputSource from '../util/input-source'
 import {combineTemplate} from '../util/rx'
-import {getJson} from '../util/ajax'
 import Firebase from 'firebase'
 import {snapshotToObject, onValueOnce, onRemoved, onAdded} from '../util/firebase'
 
