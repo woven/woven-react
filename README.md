@@ -1,4 +1,4 @@
-# Todos demo app for Dave
+# React + Rx + Firebase starter kit
 
 - Have node, npm, webpack, gulp installed globally.
 - `npm install` to get local deps.
