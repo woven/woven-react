@@ -17,7 +17,7 @@ export default () => {
 
   const addedTodo = inputSources.newTodoMessage
     .sample(inputSources.addNewTodo)
-    .map(message => ({ checked: false, message: message }))
+    .map(message => ({ checked: false, message: message, created: Date.now()  }))
 
   // Persist...
   addedTodo.subscribe(todo => todosRef.push(todo))

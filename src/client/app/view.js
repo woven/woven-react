@@ -2,6 +2,7 @@ import * as ramda from 'ramda'
 import {Component, createFactory} from 'react'
 import {a, span, div, header, ul, li, input, button} from '../util/dom'
 import {mapObjectToList} from '../util/util'
+import moment from 'moment'
 
 class AppView extends Component {
   render() {
@@ -16,7 +17,8 @@ class AppView extends Component {
         // and now we just 'loop' through the data, in this case, we map the todo items to todo elements.
         mapObjectToList(view.todos, (todo, todoId) =>
           li({key: todoId},
-            span({}, todo.message),
+            span({className: 'message'}, todo.message),
+            span({className: 'date'}, moment(todo.created).startOf('hour').fromNow().toString()),
             a({ onClick: inputSources.removeTodo.fromConstant(todoId) }, 'Remove')
           )
         )
