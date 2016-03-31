@@ -18,7 +18,7 @@ class AppView extends Component {
         mapObjectToList(view.todos, (todo, todoId) =>
           li({key: todoId},
             span({className: 'message'}, todo.message),
-            span({className: 'date'}, moment(todo.created).startOf('hour').fromNow().toString()),
+            span({className: 'date'}, moment(todo.created).fromNow().toString()),
             a({ onClick: inputSources.removeTodo.fromConstant(todoId) }, 'Remove')
           )
         )
