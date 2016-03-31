@@ -17,3 +17,12 @@ a {
 a:hover {
   text-decoration: none;
 }
+
+.message {
+  margin-right: 10px;
+}
+
+.date {
+  color: dimgray;
+  margin-right: 10px;
+}
