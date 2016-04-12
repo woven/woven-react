@@ -1,9 +1,9 @@
 import express from 'express'
 import fs from 'fs'
 import * as rxdom from 'rx-dom'
-import * as rxextra from './../client/util/rx-overrides'
+import * as rxextra from './../shared/util/rx-overrides'
 import {renderToString} from 'react-dom/server'
-import AppComponent from './../client/app/component'
+import AppComponent from './component/app'
 
 const app = express()
 

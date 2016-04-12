@@ -9,3 +9,8 @@ Rx.Observable.prototype.log = function () {
     console.log.apply(console, ramda.concat(optionalParameters, value))
   })
 }
+
+Rx.Observable.prototype.filterBy = function (o) {
+  const me = this
+  return o.map(value => me.filter(() => value)).switchLatest()
+}

@@ -1,7 +1,7 @@
 import * as rxdom from 'rx-dom'
-import * as rxextra from './util/rx-overrides'
+import * as rxextra from './../shared/util/rx-overrides'
 import {render, createElement} from 'react-dom'
-import AppComponent from './app/component'
+import AppComponent from './component/app'
 
 // Top-level subscribe should only happen once per the entire application imho.
 // Here in index.js we create one single 'instance' of our app, and it returns us an Rx observable representing our state.
