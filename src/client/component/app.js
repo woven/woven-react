@@ -5,6 +5,7 @@ import {combineTemplate} from '../../shared/util/rx'
 import Firebase from 'firebase'
 import {snapshotToObject, onValueOnce, onRemoved, onAdded} from '../util/firebase'
 import view from '../../shared/view/app'
+import {showNotification} from '../util/notification'
 
 const model = () => {
   const fb = new Firebase('https://glowing-inferno-1196.firebaseio.com/')
@@ -25,14 +26,20 @@ const model = () => {
   inputSources.removeTodo.subscribe(id => todosRef.child(id).remove())
 
   const initialTodos = onValueOnce(todosRef).map(snapshot => ({data: snapshot.val(), type: 'add'}))
-  const additionalTodos = onAdded(todosRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'add'}))
+  const hasFetchedInitialTodos = initialTodos.map(true)
+
+  const additionalTodos = onAdded(todosRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'add'})).filterBy(hasFetchedInitialTodos)
   const removedTodos = onRemoved(todosRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'remove'}))
 
-  const hasFetchedInitialTodos = initialTodos.map(true)
+  additionalTodos.subscribe(todo => {
+    // Damn Firebase object structure is complicated...
+    const firstId = ramda.keys(todo.data)[0]
+    showNotification(todo.data[firstId].message)
+  })
 
   const todoActions = Rx.Observable.merge(
     initialTodos,
-    additionalTodos.filterBy(hasFetchedInitialTodos),
+    additionalTodos,
     removedTodos
   )
 
