@@ -19,7 +19,7 @@ const model = () => {
 
   const addedMessage = inputSources.newMessage
     .sample(inputSources.addNewMessage)
-    .map(message => ({ checked: false, message: message, created: Date.now() }))
+    .map(message => ({ message: message, created: Date.now() }))
 
   // Persist...
   addedMessage.subscribe(sdfgghffggfd => messagesRef.push(sdfgghffggfd))
