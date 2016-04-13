@@ -2,9 +2,9 @@ import * as ramda from 'ramda'
 import {Component, createFactory} from 'react'
 import {a, span, div, header, ul, li, input, button} from '../util/vdom'
 import {mapObjectToList} from '../util/util'
-import moment from 'moment'
 import * as styles from '../styles/app'
 import Radium from 'radium'
+import timestamp from './timestamp'
 
 class AppView extends Component {
   render() {
@@ -22,7 +22,7 @@ class AppView extends Component {
         mapObjectToList(view.todos, (todo, todoId) =>
           li({key: todoId, style: styles.todo},
             span({style: styles.message}, todo.message),
-            span({style: styles.date}, moment(todo.created).fromNow().toString()),
+            span({style: styles.date}, timestamp({value: todo.created})),
             a({ onClick: e => inputSources.removeTodo.fromConstant(todoId) }, 'Remove')
           )
         )
