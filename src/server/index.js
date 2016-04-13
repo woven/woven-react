@@ -18,7 +18,7 @@ app.use('/', express.static('target/web', staticOptions))
 app.use('/', express.static('static', staticOptions))
 
 app.use((req, res) => {
-  AppComponent().first().subscribe(vdom => {
+  AppComponent({radiumConfig: {userAgent: req.headers['user-agent']}}).first().subscribe(vdom => {
     const appHtml = renderToString(vdom)
     fs.readFile('static/index.html', (err, html) => {
       if (err) { throw err }

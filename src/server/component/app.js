@@ -1,17 +1,18 @@
 import Rx from 'rx'
 import {combineTemplate} from '../../shared/util/rx'
+import {merge} from 'ramda'
 import view from '../../shared/view/app'
 import * as http from '../util/http'
 
-const model = () => {
+const model = (properties) => {
   const fbUrl = 'https://glowing-inferno-1196.firebaseio.com/'
 
-  return combineTemplate({
+  return combineTemplate(merge(properties, {
     view: {
       todos: http.read(fbUrl + 'todos.json').map(JSON.parse),
       newTodoMessage: ''
     }
-  })
+  }))
 }
 
-export default () => model().map(view)
+export default (properties) => model(properties).map(view)

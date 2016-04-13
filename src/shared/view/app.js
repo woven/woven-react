@@ -3,6 +3,8 @@ import {Component, createFactory} from 'react'
 import {a, span, div, header, ul, li, input, button} from '../util/vdom'
 import {mapObjectToList} from '../util/util'
 import moment from 'moment'
+import * as styles from '../styles/app'
+import Radium from 'radium'
 
 class AppView extends Component {
   render() {
@@ -10,14 +12,17 @@ class AppView extends Component {
     const inputSources = this.props.inputSources
 
     return div({className: 'main'},
-      header({}),
+      header({style: styles.header},
+        a({style: styles.menuLink, key: 'messages'}, 'Messages'),
+        a({style: styles.menuLink, key: 'about'}, 'About')
+      ),
       ul({},
         // the `data` is passed to MyApp component at the bottom of the file (in ReactDOM.render())
         // and now we just 'loop' through the data, in this case, we map the todo items to todo elements.
         mapObjectToList(view.todos, (todo, todoId) =>
-          li({key: todoId},
-            span({className: 'message'}, todo.message),
-            span({className: 'date'}, moment(todo.created).fromNow().toString()),
+          li({key: todoId, style: styles.todo},
+            span({style: styles.message}, todo.message),
+            span({style: styles.date}, moment(todo.created).fromNow().toString()),
             a({ onClick: e => inputSources.removeTodo.fromConstant(todoId) }, 'Remove')
           )
         )
@@ -32,4 +37,4 @@ class AppView extends Component {
   }
 }
 
-export default createFactory(AppView)
+export default createFactory(Radium(AppView))
