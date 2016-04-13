@@ -1,8 +1,9 @@
-import {Component, createFactory} from 'react'
+import {createFactory} from 'react'
 import {span} from '../util/vdom'
 import moment from 'moment'
+import BaseComponent from './base'
 
-class Timestamp extends Component {
+class Timestamp extends BaseComponent {
   constructor(props) {
     super(props)
     this.state = this.createNewState()
