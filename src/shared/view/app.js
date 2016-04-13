@@ -13,26 +13,41 @@ class AppView extends Component {
 
     return div({className: 'main'},
       header({style: styles.header},
-        a({style: styles.menuLink, key: 'messages'}, 'Messages'),
-        a({style: styles.menuLink, key: 'about'}, 'About')
+        div({style: styles.menu},
+          a({style: styles.menuLink, key: 'messages'}, 'Messages'),
+          a({style: styles.menuLink, key: 'about'}, 'About')
+        )
       ),
-      ul({},
+      div({},
         // the `data` is passed to MyApp component at the bottom of the file (in ReactDOM.render())
         // and now we just 'loop' through the data, in this case, we map the messages to message elements.
         mapObjectToList(view.messages, (messages, messageId) =>
-          li({key: messageId, style: styles.messageContainer},
-            span({style: styles.message}, messages.message),
-            span({style: styles.date}, timestamp({value: messages.created})),
-            a({ onClick: e => inputSources.removeMessage.fromConstant(messageId) }, 'Remove')
+          div({key: messageId, style: styles.messageContainer},
+            div({style: styles.userPhotoArea},
+              div({style: styles.userPhoto})
+            ),
+            div({},
+              div({style: styles.date}, timestamp({value: messages.created})),
+              div({style: styles.message}, messages.message),
+              a({
+                style: styles.actionLink,
+                onClick: e => inputSources.removeMessage.fromConstant(messageId) }, 'Remove')
+            )
           )
         )
       ),
-      input({
-        value: view.newMessage,
-        onChange: e => inputSources.newMessage.fromTargetValue(e),
-        onKeyUp: e => inputSources.addNewMessage.fromOnlyKeyCode(e, 13)
-      }),
-      button({ onClick: e => inputSources.addNewMessage.fromConstant() }, 'Add!')
+      div({style: styles.messageBox},
+        input({
+          style: styles.messageInput,
+          value: view.newMessage,
+          onChange: e => inputSources.newMessage.fromTargetValue(e),
+          onKeyUp: e => inputSources.addNewMessage.fromOnlyKeyCode(e, 13)
+        })
+        //,button({
+        //  style: styles.messageButton,
+        //  onClick: e => inputSources.addNewMessage.fromConstant() }, 'Add!'
+        //)
+      )
     )
   }
 }
