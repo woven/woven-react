@@ -11,7 +11,7 @@ export const header = {
   background: 'linear-gradient(to left top, #3C8E0E, #258614)'
 }
 
-export const todo = {
+export const messageContainer = {
   padding: '12px'
 }
 

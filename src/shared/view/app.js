@@ -18,21 +18,21 @@ class AppView extends Component {
       ),
       ul({},
         // the `data` is passed to MyApp component at the bottom of the file (in ReactDOM.render())
-        // and now we just 'loop' through the data, in this case, we map the todo items to todo elements.
-        mapObjectToList(view.todos, (todo, todoId) =>
-          li({key: todoId, style: styles.todo},
-            span({style: styles.message}, todo.message),
-            span({style: styles.date}, timestamp({value: todo.created})),
-            a({ onClick: e => inputSources.removeTodo.fromConstant(todoId) }, 'Remove')
+        // and now we just 'loop' through the data, in this case, we map the messages to message elements.
+        mapObjectToList(view.messages, (messages, messageId) =>
+          li({key: messageId, style: styles.messageContainer},
+            span({style: styles.message}, messages.message),
+            span({style: styles.date}, timestamp({value: messages.created})),
+            a({ onClick: e => inputSources.removeMessage.fromConstant(messageId) }, 'Remove')
           )
         )
       ),
       input({
-        value: view.newTodoMessage,
-        onChange: e => inputSources.newTodoMessage.fromTargetValue(e),
-        onKeyUp: e => inputSources.addNewTodo.fromOnlyKeyCode(e, 13)
+        value: view.newMessage,
+        onChange: e => inputSources.newMessage.fromTargetValue(e),
+        onKeyUp: e => inputSources.addNewMessage.fromOnlyKeyCode(e, 13)
       }),
-      button({ onClick: e => inputSources.addNewTodo.fromConstant() }, 'Add!')
+      button({ onClick: e => inputSources.addNewMessage.fromConstant() }, 'Add!')
     )
   }
 }

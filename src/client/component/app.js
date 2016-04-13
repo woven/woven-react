@@ -9,54 +9,54 @@ import {showNotification} from '../util/notification'
 
 const model = () => {
   const fb = new Firebase('https://glowing-inferno-1196.firebaseio.com/')
-  const todosRef = fb.child('todos')
+  const messagesRef = fb.child('messages')
 
   const inputSources = {
-    newTodoMessage: InputSource(),
-    addNewTodo: InputSource(),
-    removeTodo: InputSource()
+    newMessage: InputSource(),
+    addNewMessage: InputSource(),
+    removeMessage: InputSource()
   }
 
-  const addedTodo = inputSources.newTodoMessage
-    .sample(inputSources.addNewTodo)
+  const addedMessage = inputSources.newMessage
+    .sample(inputSources.addNewMessage)
     .map(message => ({ checked: false, message: message, created: Date.now() }))
 
   // Persist...
-  addedTodo.subscribe(todo => todosRef.push(todo))
-  inputSources.removeTodo.subscribe(id => todosRef.child(id).remove())
+  addedMessage.subscribe(sdfgghffggfd => messagesRef.push(sdfgghffggfd))
+  inputSources.removeMessage.subscribe(id => messagesRef.child(id).remove())
 
-  const initialTodos = onValueOnce(todosRef).map(snapshot => ({data: snapshot.val(), type: 'add'}))
-  const hasFetchedInitialTodos = initialTodos.map(true)
+  const initialMessages = onValueOnce(messagesRef).map(snapshot => ({data: snapshot.val(), type: 'add'}))
+  const hasFetchedInitialMessages = initialMessages.map(true)
 
-  const additionalTodos = onAdded(todosRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'add'})).filterBy(hasFetchedInitialTodos)
-  const removedTodos = onRemoved(todosRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'remove'}))
+  const additionalMessages = onAdded(messagesRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'add'})).filterBy(hasFetchedInitialMessages)
+  const removeMessages = onRemoved(messagesRef).map(snapshot => ({data: snapshotToObject(snapshot), type: 'remove'}))
 
-  additionalTodos.subscribe(todo => {
+  additionalMessages.subscribe(message => {
     // Damn Firebase object structure is complicated...
-    const firstId = ramda.keys(todo.data)[0]
-    showNotification(todo.data[firstId].message)
+    const firstId = ramda.keys(message.data)[0]
+    showNotification(message.data[firstId].message)
   })
 
-  const todoActions = Rx.Observable.merge(
-    initialTodos,
-    additionalTodos,
-    removedTodos
+  const messageActions = Rx.Observable.merge(
+    initialMessages,
+    additionalMessages,
+    removeMessages
   )
 
-  const todos = todoActions.scan((currentTodos, action) => {
+  const messages = messageActions.scan((currentMessages, action) => {
     if (action.type == 'add') {
-      return ramda.merge(currentTodos, action.data)
+      return ramda.merge(currentMessages, action.data)
     } else {
-      return ramda.omit(ramda.keys(action.data), currentTodos)
+      return ramda.omit(ramda.keys(action.data), currentMessages)
     }
   }, {})
 
   return combineTemplate({
     view: {
-      todos: todos,
-      newTodoMessage: Rx.Observable.merge(
-        inputSources.newTodoMessage.startWith(''),
-        inputSources.addNewTodo.map('')
+      messages: messages,
+      newMessage: Rx.Observable.merge(
+        inputSources.newMessage.startWith(''),
+        inputSources.addNewMessage.map('')
       )
     },
     inputSources: Rx.Observable.just(inputSources)

@@ -9,8 +9,8 @@ const model = (properties) => {
 
   return combineTemplate(merge(properties, {
     view: {
-      todos: http.read(fbUrl + 'todos.json').map(JSON.parse),
-      newTodoMessage: ''
+      messages: http.read(fbUrl + 'messages.json').map(JSON.parse),
+      newMessage: ''
     }
   }))
 }
