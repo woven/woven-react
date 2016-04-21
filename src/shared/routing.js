@@ -1,12 +1,15 @@
+import Rx from 'rx'
+
 export const routes = {
   home: '/',
-  about: '/about'
+  about: '/about',
+  events: '/events'
 }
 
-const getCurrentRoute = () => window.location.pathname
+export const Router = (options = {}) => {
+  const getCurrentRoute = () => options.pathname || window.location.pathname
 
-export const Router = () => {
-  const route = new rx.BehaviorSubject(getCurrentRoute()) // BehaviorSubject can be given an initial value.
+  const route = new Rx.BehaviorSubject(getCurrentRoute())
 
   return {
     route,

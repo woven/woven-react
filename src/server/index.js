@@ -5,6 +5,10 @@ import * as rxextra from './../shared/util/rx-overrides'
 import {renderToString} from 'react-dom/server'
 import AppComponent from './component/app'
 
+// Bug in v8: https://github.com/facebook/react/issues/6451
+Object.assign = null
+Object.assign = require('object-assign')
+
 const app = express()
 
 const staticOptions = {
@@ -18,7 +22,10 @@ app.use('/', express.static('target/web', staticOptions))
 app.use('/', express.static('static', staticOptions))
 
 app.use((req, res) => {
-  AppComponent({radiumConfig: {userAgent: req.headers['user-agent']}}).first().subscribe(vdom => {
+  AppComponent({
+    radiumConfig: {userAgent: req.headers['user-agent']},
+    pathname: req.url
+  }).first().subscribe(vdom => {
     const appHtml = renderToString(vdom)
     fs.readFile('static/index.html', (err, html) => {
       if (err) { throw err }

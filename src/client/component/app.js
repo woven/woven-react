@@ -6,10 +6,12 @@ import Firebase from 'firebase'
 import {snapshotToObject, onValueOnce, onRemoved, onAdded} from '../util/firebase'
 import view from '../../shared/view/app'
 import {showNotification} from '../util/notification'
+import {Router} from '../../shared/routing'
 
 const model = () => {
   const fb = new Firebase('https://glowing-inferno-1196.firebaseio.com/')
   const messagesRef = fb.child('messages')
+  const router = Router()
 
   const inputSources = {
     newMessage: InputSource(),
@@ -22,7 +24,7 @@ const model = () => {
     .map(message => ({ message: message, created: Date.now() }))
 
   // Persist...
-  addedMessage.subscribe(sdfgghffggfd => messagesRef.push(sdfgghffggfd))
+  addedMessage.subscribe(m => messagesRef.push(m))
   inputSources.removeMessage.subscribe(id => messagesRef.child(id).remove())
 
   const initialMessages = onValueOnce(messagesRef).map(snapshot => ({data: snapshot.val(), type: 'add'}))
@@ -59,6 +61,7 @@ const model = () => {
         inputSources.addNewMessage.map('')
       )
     },
+    router,
     inputSources: Rx.Observable.just(inputSources)
   }).log('app/model state: ')
 }
