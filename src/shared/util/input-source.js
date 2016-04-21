@@ -1,13 +1,19 @@
 import * as Rx from 'rx'
 
-export default () => {
-  // This is a helper InputSource object.
-  // It extends Rx.Subject with few nice methods.
-  const inputSource = new Rx.Subject()
+class InputSource extends Rx.Subject {
+  fromConstant(value) {
+    super.onNext(value)
+  }
 
-  inputSource.fromConstant = (value) => inputSource.onNext(value)
-  inputSource.fromTargetValue = (e) => inputSource.onNext(e.target.value)
-  inputSource.fromOnlyKeyCode = (e, key) => e.keyCode == key ? inputSource.onNext(e.target.value) : null
+  fromTargetValue(e) {
+    super.onNext(e.target.value)
+  }
 
-  return inputSource
+  fromOnlyKeyCode(e, key) {
+    if (e.keyCode == key) {
+      super.onNext(e.target.value)
+    }
+  }
 }
+
+export default () => new InputSource()
