@@ -5,10 +5,6 @@ import * as rxextra from './../shared/util/rx-overrides'
 import {renderToString} from 'react-dom/server'
 import AppComponent from './component/app'
 
-// Bug in v8: https://github.com/facebook/react/issues/6451
-Object.assign = null
-Object.assign = require('object-assign')
-
 const app = express()
 
 const staticOptions = {
