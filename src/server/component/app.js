@@ -6,7 +6,7 @@ import * as http from '../util/http'
 import {Router} from '../../shared/routing'
 
 const model = (properties) => {
-  const fbUrl = 'https://glowing-inferno-1196.firebaseio.com/'
+  const fbUrl = 'https://woven-react.firebaseio.com/'
 
   return combineTemplate(merge(properties, {
     view: {

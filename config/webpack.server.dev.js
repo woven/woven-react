@@ -18,7 +18,7 @@ module.exports = {
   devtool: 'eval-cheap-module-source-map',
   externals: nodeModules,
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
